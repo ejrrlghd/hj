@@ -1,1 +1,472 @@
 
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>숨, 휴식 - 나의 작은 쉼터</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;700&family=Pretendard:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #f7f5f0; /* 따뜻한 샌드 웜 화이트 */
+            color: #2d312e; /* 편안한 다크 올리브/그레이 */
+        }
+        .serif-font {
+            font-family: 'Noto Serif KR', serif;
+        }
+        /* 부드러운 전환 효과 */
+        .transition-all {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* 숨쉬기 가이드 애니메이션 */
+        @keyframes breathe {
+            0%, 100% { transform: scale(0.85); background-color: #c2d5c6; }
+            45%, 55% { transform: scale(1.15); background-color: #e3ece6; box-shadow: 0 0 25px rgba(194, 213, 198, 0.6); }
+        }
+        .breathing-circle {
+            animation: breathe 8s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-emerald-100 pb-20 md:pb-0">
+
+    <!-- 모바일 및 웹 공통 상단 네비게이션 -->
+    <header class="sticky top-0 z-40 bg-white/70 backdrop-blur-md border-b border-stone-200/50 px-6 py-4 flex justify-between items-center">
+        <h1 class="serif-font text-lg font-bold tracking-widest text-emerald-800">
+            <span class="text-xs font-normal block tracking-normal text-stone-400">나만의 마음 쉼터</span>
+            숨, 숲
+        </h1>
+        <div class="text-stone-500 hover:text-emerald-800 transition-colors cursor-pointer" onclick="openModal('about-modal')">
+            <i class="fa-regular fa-circle-question text-xl"></i>
+        </div>
+    </header>
+
+    <!-- 메인 컨텐츠 영역 -->
+    <main class="max-w-md mx-auto w-full px-5 py-6 space-y-8 flex-grow">
+
+        <!-- 1. 오늘의 명상 & 숨쉬기 가이드 카드 -->
+        <section class="bg-white rounded-3xl p-6 shadow-sm border border-stone-100 flex flex-col items-center text-center">
+            <span class="text-xs font-semibold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full mb-4">Mindfulness</span>
+            <h2 class="serif-font text-xl font-medium mb-2">마음 챙김 호흡</h2>
+            <p class="text-xs text-stone-400 mb-6" id="breathe-instruction">원 안의 움직임에 맞춰 숨을 깊게 들이쉬고 내쉬세요.</p>
+            
+            <!-- 호흡 애니메이션 서클 -->
+            <div class="relative w-40 h-40 flex items-center justify-center mb-6">
+                <div class="breathing-circle w-32 h-32 rounded-full flex items-center justify-center text-emerald-800 font-medium">
+                    <span id="breathe-text" class="serif-font transition-all duration-700">들이쉬기</span>
+                </div>
+            </div>
+
+            <!-- 명상 글귀 -->
+            <p id="quote" class="serif-font text-sm leading-relaxed text-stone-600 mt-2 px-2 italic">
+                "어디로 가야 할지 모를 때는, 잠시 멈춰 서서 지금 머무는 곳을 바라보세요."
+            </p>
+            <button onclick="changeQuote()" class="mt-4 text-xs text-emerald-600 hover:text-emerald-800 flex items-center gap-1.5 transition-colors">
+                <i class="fa-solid fa-rotate"></i> 다른 글귀 읽기
+            </button>
+        </section>
+
+        <!-- 2. 백색 소음 플레이어 카드 -->
+        <section class="bg-white rounded-3xl p-6 shadow-sm border border-stone-100">
+            <span class="text-xs font-semibold uppercase tracking-wider text-amber-700 bg-amber-50 px-3 py-1 rounded-full mb-4 inline-block">Soundscape</span>
+            <h2 class="serif-font text-xl font-medium mb-1">자연의 소리</h2>
+            <p class="text-xs text-stone-400 mb-5">마음을 안심시켜 주는 백색 소음을 곁들여보세요.</p>
+            
+            <!-- 소음 리스트 (합성 오디오 또는 가상 플레이어 연출) -->
+            <div class="space-y-3">
+                <!-- 빗소리 -->
+                <div class="flex items-center justify-between p-3.5 bg-stone-50 rounded-2xl border border-stone-100 hover:border-emerald-200 transition-all cursor-pointer" onclick="togglePlay('rain')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center">
+                            <i class="fa-solid fa-cloud-showers-heavy"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium">한적한 숲속의 빗소리</p>
+                            <p class="text-xs text-stone-400">차분하고 차가운 우중 소리</p>
+                        </div>
+                    </div>
+                    <button class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-stone-400 hover:text-emerald-600 shadow-sm transition-all" id="btn-rain">
+                        <i class="fa-solid fa-play text-xs"></i>
+                    </button>
+                </div>
+
+                <!-- 타닥타닥 모닥불 -->
+                <div class="flex items-center justify-between p-3.5 bg-stone-50 rounded-2xl border border-stone-100 hover:border-emerald-200 transition-all cursor-pointer" onclick="togglePlay('fire')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center">
+                            <i class="fa-solid fa-fire"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium">타오르는 가을 밤 모닥불</p>
+                            <p class="text-xs text-stone-400">따뜻하고 불규칙한 타닥임</p>
+                        </div>
+                    </div>
+                    <button class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-stone-400 hover:text-emerald-600 shadow-sm transition-all" id="btn-fire">
+                        <i class="fa-solid fa-play text-xs"></i>
+                    </button>
+                </div>
+
+                <!-- 시냇물 잔잔한 바람 -->
+                <div class="flex items-center justify-between p-3.5 bg-stone-50 rounded-2xl border border-stone-100 hover:border-emerald-200 transition-all cursor-pointer" onclick="togglePlay('wind')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-500 flex items-center justify-center">
+                            <i class="fa-solid fa-wind"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium">새벽 계곡과 바람소리</p>
+                            <p class="text-xs text-stone-400">상쾌하고 부드러운 바람</p>
+                        </div>
+                    </div>
+                    <button class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-stone-400 hover:text-emerald-600 shadow-sm transition-all" id="btn-wind">
+                        <i class="fa-solid fa-play text-xs"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 오디오 실제 구동용 엘리먼트 (Royalty Free 저작권 없는 간편 소리 리소스 링크) -->
+            <audio id="audio-rain" loop src="https://assets.mixkit.co/active_storage/sfx/2522/2522-84.wav"></audio>
+            <audio id="audio-fire" loop src="https://assets.mixkit.co/active_storage/sfx/2438/2438-84.wav"></audio>
+            <audio id="audio-wind" loop src="https://assets.mixkit.co/active_storage/sfx/2537/2537-84.wav"></audio>
+        </section>
+
+        <!-- 3. 마음 일기 & 감정 스케치 카드 -->
+        <section class="bg-white rounded-3xl p-6 shadow-sm border border-stone-100">
+            <span class="text-xs font-semibold uppercase tracking-wider text-purple-700 bg-purple-50 px-3 py-1 rounded-full mb-4 inline-block">Mood Tracker</span>
+            <h2 class="serif-font text-xl font-medium mb-1">오늘 나의 감정 조각</h2>
+            <p class="text-xs text-stone-400 mb-5">오늘의 내 마음은 어떤 색을 띠고 있나요?</p>
+
+            <!-- 감정 선택 버튼들 -->
+            <div class="grid grid-cols-4 gap-2 mb-4">
+                <button onclick="selectMood('happy', '😊 기쁨')" class="mood-btn flex flex-col items-center p-3 bg-stone-50 hover:bg-emerald-50 rounded-2xl border border-transparent transition-all" data-mood="happy">
+                    <span class="text-xl mb-1">😊</span>
+                    <span class="text-[10px] text-stone-500">기쁨</span>
+                </button>
+                <button onclick="selectMood('calm', '😌 평온')" class="mood-btn flex flex-col items-center p-3 bg-stone-50 hover:bg-emerald-50 rounded-2xl border border-transparent transition-all" data-mood="calm">
+                    <span class="text-xl mb-1">😌</span>
+                    <span class="text-[10px] text-stone-500">평온</span>
+                </button>
+                <button onclick="selectMood('tired', '🥱 지침')" class="mood-btn flex flex-col items-center p-3 bg-stone-50 hover:bg-emerald-50 rounded-2xl border border-transparent transition-all" data-mood="tired">
+                    <span class="text-xl mb-1">🥱</span>
+                    <span class="text-[10px] text-stone-500">지침</span>
+                </button>
+                <button onclick="selectMood('sad', '😢 슬픔')" class="mood-btn flex flex-col items-center p-3 bg-stone-50 hover:bg-emerald-50 rounded-2xl border border-transparent transition-all" data-mood="sad">
+                    <span class="text-xl mb-1">😢</span>
+                    <span class="text-[10px] text-stone-500">슬픔</span>
+                </button>
+            </div>
+
+            <!-- 간단 일기 적기 -->
+            <div class="space-y-3">
+                <textarea id="diary-text" rows="2" placeholder="이곳에 흘려보내고 싶은 마음을 자유롭게 털어놓으세요." class="w-full p-4 text-sm bg-stone-50 border border-stone-100 rounded-2xl focus:outline-none focus:ring-1 focus:ring-emerald-400 focus:bg-white transition-all placeholder:text-stone-400 resize-none"></textarea>
+                <button onclick="saveDiary()" class="w-full bg-emerald-800 text-white py-3 rounded-2xl font-medium text-sm shadow-md shadow-emerald-950/10 hover:bg-emerald-900 transition-colors">
+                    마음 일기 저장하기
+                </button>
+            </div>
+
+            <!-- 저장된 일기 리스트 -->
+            <div class="mt-6 border-t border-stone-100 pt-5">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-xs font-semibold text-stone-500">흘려보낸 마음 기록</h3>
+                    <button onclick="clearDiaries()" class="text-[10px] text-stone-400 hover:text-red-500 transition-colors">전체 삭제</button>
+                </div>
+                <div id="diary-list" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                    <!-- 스크립트로 들어갈 영역 -->
+                    <p class="text-xs text-stone-400 text-center py-4 italic">아직 기록된 마음이 없습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. 일상의 소소한 디지털 휴식 제안 -->
+        <section class="bg-gradient-to-br from-emerald-800 to-teal-900 rounded-3xl p-6 text-white shadow-lg">
+            <h2 class="serif-font text-lg font-medium mb-1">오늘의 소소한 제안</h2>
+            <p class="text-xs text-emerald-200/80 mb-4">지금 즉시 몸과 마음을 환기할 수 있는 쉼의 처방전</p>
+            
+            <div class="flex items-start gap-3 bg-white/10 p-3.5 rounded-2xl backdrop-blur-sm border border-white/10">
+                <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 text-amber-200">
+                    <i class="fa-solid fa-leaf"></i>
+                </div>
+                <div>
+                    <p class="text-xs font-semibold text-white mb-0.5">3분간 화면 멀리보기</p>
+                    <p class="text-[11px] text-emerald-100 leading-relaxed">스마트폰을 내려놓고 창문 밖 먼 풍경이나 가구의 먼 모서리를 지긋이 응시해 보세요. 피로했던 망막의 근육이 편안히 풀어집니다.</p>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- 하단 푸터 -->
+    <footer class="bg-stone-100 border-t border-stone-200/50 py-8 px-6 text-center text-xs text-stone-400">
+        <p class="serif-font text-sm text-stone-600 mb-2">나의 마음을 살피는 공간, 숨</p>
+        <p>© 2026 숨. All rights reserved.</p>
+    </footer>
+
+    <!-- 모바일 하단 플로팅 컨트롤 바 (모바일에 친숙한 디자인) -->
+    <div class="fixed bottom-0 left-0 right-0 h-16 bg-white/90 backdrop-blur-md border-t border-stone-200 flex justify-around items-center md:hidden z-30">
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex flex-col items-center justify-center text-emerald-800">
+            <i class="fa-solid fa-house text-lg"></i>
+            <span class="text-[10px] mt-0.5 font-medium">홈</span>
+        </button>
+        <button onclick="document.getElementById('diary-text').scrollIntoView({behavior: 'smooth'})" class="flex flex-col items-center justify-center text-stone-400 hover:text-emerald-800">
+            <i class="fa-solid fa-pen-nib text-lg"></i>
+            <span class="text-[10px] mt-0.5">일기</span>
+        </button>
+        <button onclick="openModal('about-modal')" class="flex flex-col items-center justify-center text-stone-400 hover:text-emerald-800">
+            <i class="fa-solid fa-circle-info text-lg"></i>
+            <span class="text-[10px] mt-0.5">정보</span>
+        </button>
+    </div>
+
+    <!-- 정보/소개 모달 팝업 -->
+    <div id="about-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center hidden p-5">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl relative">
+            <button onclick="closeModal('about-modal')" class="absolute top-5 right-5 text-stone-400 hover:text-stone-700">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <h3 class="serif-font text-lg font-bold text-emerald-800 mb-2">이 페이지는 어떤 공간인가요?</h3>
+            <p class="text-xs text-stone-500 leading-relaxed space-y-2 mb-4">
+                이곳은 일상의 스트레스와 과도한 디지털 피로에서 잠시 멀어지기 위해 고안된 '휴식형 개인 홈페이지'입니다.<br><br>
+                자연의 백색 소음을 켜두고 명상 호흡 가이드에 맞춰 가만히 호흡해 보세요. 그리고 매일 흘려보내고 싶은 마음에 대해 기록하며 가벼운 나를 마주하길 바랍니다.
+            </p>
+            <p class="text-[11px] bg-stone-50 p-2.5 rounded-xl text-stone-400 italic">
+                "쉼은 게으름이 아니라, 앞으로 걸어가기 위한 꼭 필요한 호흡입니다."
+            </p>
+            <button onclick="closeModal('about-modal')" class="w-full mt-4 bg-stone-100 hover:bg-stone-200 text-stone-600 py-2.5 rounded-xl text-xs font-semibold transition-all">
+                닫기
+            </button>
+        </div>
+    </div>
+
+    <!-- 알림 메시지 컴포넌트 -->
+    <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 bg-stone-800/90 text-white text-xs px-4 py-2.5 rounded-full shadow-lg z-50 opacity-0 pointer-events-none transition-all duration-300">
+        알림 메시지입니다.
+    </div>
+
+    <!-- 스크립트 비즈니스 로직 -->
+    <script>
+        // 1. 호흡 유도 문구 자동 변경 루프
+        const breatheText = document.getElementById('breathe-text');
+        const breatheInstruction = document.getElementById('breathe-instruction');
+        let cycleCount = 0;
+        
+        setInterval(() => {
+            cycleCount++;
+            if (cycleCount % 2 === 0) {
+                breatheText.innerText = "들숨 (In)";
+                breatheInstruction.innerText = "배를 살며시 채우듯 숨을 크게 모읍니다.";
+            } else {
+                breatheText.innerText = "날숨 (Out)";
+                breatheInstruction.innerText = "가만히 몸 안의 묵은 긴장을 밖으로 보냅니다.";
+            }
+        }, 4000); // 8초 주기의 절반마다 변경
+
+        // 2. 명상 구절 데이터 및 로직
+        const quotes = [
+            "\"어디로 가야 할지 모를 때는, 잠시 멈춰 서서 지금 머무는 곳을 바라보세요.\"",
+            "\"숨을 들이마시며 몸을 편안히 하고, 숨을 내쉬며 엷은 미소를 지어봅니다.\"",
+            "\"오늘 하루도 애쓴 당신에게, 따뜻한 차 한 잔만큼의 포근함이 머물기를.\"",
+            "\"완벽하게 해내지 않아도 괜찮습니다. 당신은 이미 존재 자체로 충분해요.\"",
+            "\"파도는 끊임없이 오고 가듯, 마음속 생각들도 흐르고 흘러 지나갈 뿐입니다.\"",
+            "\"지나간 과거도, 아직 오지 않은 미래도 아닌 오직 '지금 이 순간'을 숨 쉬어보세요.\""
+        ];
+
+        function changeQuote() {
+            const quoteEl = document.getElementById('quote');
+            const currentIndex = quotes.indexOf(quoteEl.innerText);
+            let nextIndex = Math.floor(Math.random() * quotes.length);
+            
+            while(nextIndex === currentIndex) {
+                nextIndex = Math.floor(Math.random() * quotes.length);
+            }
+            
+            quoteEl.style.opacity = '0';
+            setTimeout(() => {
+                quoteEl.innerText = quotes[nextIndex];
+                quoteEl.style.opacity = '1';
+            }, 300);
+        }
+
+        // 3. 백색 소음 플레이어 로직
+        function togglePlay(type) {
+            const audio = document.getElementById(`audio-${type}`);
+            const btn = document.getElementById(`btn-${type}`);
+            
+            if (audio.paused) {
+                // 다른 모든 사운드 중단
+                ['rain', 'fire', 'wind'].forEach(key => {
+                    const otherAudio = document.getElementById(`audio-${key}`);
+                    const otherBtn = document.getElementById(`btn-${key}`);
+                    if (otherAudio && !otherAudio.paused && key !== type) {
+                        otherAudio.pause();
+                        otherBtn.innerHTML = '<i class="fa-solid fa-play text-xs"></i>';
+                        otherBtn.classList.remove('bg-emerald-600', 'text-white');
+                        otherBtn.classList.add('bg-white', 'text-stone-400');
+                    }
+                });
+
+                audio.play().then(() => {
+                    btn.innerHTML = '<i class="fa-solid fa-pause text-xs"></i>';
+                    btn.classList.remove('bg-white', 'text-stone-400');
+                    btn.classList.add('bg-emerald-600', 'text-white');
+                    showToast(`${type === 'rain' ? '빗소리' : type === 'fire' ? '모닥불 소리' : '바람 소리'}가 시작되었습니다.`);
+                }).catch(err => {
+                    showToast('음원 재생 실패. 브라우저의 오디오 보호 기능 때문일 수 있습니다.');
+                });
+            } else {
+                audio.pause();
+                btn.innerHTML = '<i class="fa-solid fa-play text-xs"></i>';
+                btn.classList.remove('bg-emerald-600', 'text-white');
+                btn.classList.add('bg-white', 'text-stone-400');
+            }
+        }
+
+        // 4. 감정 일기 저장 및 영구(Local) 보관 로직
+        let selectedMoodValue = '';
+        let selectedMoodLabel = '';
+
+        function selectMood(value, label) {
+            selectedMoodValue = value;
+            selectedMoodLabel = label;
+            
+            // 모든 버튼 초기화
+            document.querySelectorAll('.mood-btn').forEach(btn => {
+                btn.classList.remove('border-emerald-600', 'bg-emerald-50');
+                btn.classList.add('border-transparent', 'bg-stone-50');
+            });
+
+            // 선택된 버튼 활성화
+            const activeBtn = document.querySelector(`.mood-btn[data-mood="${value}"]`);
+            if (activeBtn) {
+                activeBtn.classList.remove('border-transparent', 'bg-stone-50');
+                activeBtn.classList.add('border-emerald-600', 'bg-emerald-50/70');
+            }
+        }
+
+        function saveDiary() {
+            const diaryText = document.getElementById('diary-text').value.trim();
+            
+            if (!selectedMoodValue) {
+                showToast('오늘 어울리는 마음 상태(이모지)를 먼저 골라주세요.');
+                return;
+            }
+            if (!diaryText) {
+                showToast('비워둘 마음에 관해 몇 글자 가볍게 기록해 주세요.');
+                return;
+            }
+
+            const newRecord = {
+                id: Date.now(),
+                mood: selectedMoodLabel,
+                text: diaryText,
+                date: new Date().toLocaleDateString('ko-KR', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })
+            };
+
+            let diaries = JSON.parse(localStorage.getItem('rest_diaries') || '[]');
+            diaries.unshift(newRecord);
+            localStorage.setItem('rest_diaries', JSON.stringify(diaries));
+
+            // 초기화
+            document.getElementById('diary-text').value = '';
+            selectedMoodValue = '';
+            selectedMoodLabel = '';
+            document.querySelectorAll('.mood-btn').forEach(btn => {
+                btn.classList.remove('border-emerald-600', 'bg-emerald-50/70');
+                btn.classList.add('border-transparent', 'bg-stone-50');
+            });
+
+            renderDiaries();
+            showToast('마음을 편안하게 고정해 두었습니다.');
+        }
+
+        function renderDiaries() {
+            const listContainer = document.getElementById('diary-list');
+            const diaries = JSON.parse(localStorage.getItem('rest_diaries') || '[]');
+
+            if (diaries.length === 0) {
+                listContainer.innerHTML = '<p class="text-xs text-stone-400 text-center py-4 italic">아직 기록된 마음이 없습니다.</p>';
+                return;
+            }
+
+            listContainer.innerHTML = diaries.map(item => `
+                <div class="bg-stone-50 p-3.5 rounded-2xl border border-stone-200/40 text-left text-xs text-stone-600">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="font-semibold text-emerald-800">${item.mood}</span>
+                        <span class="text-[10px] text-stone-400">${item.date}</span>
+                    </div>
+                    <p class="leading-relaxed whitespace-pre-wrap">${escapeHtml(item.text)}</p>
+                    <div class="mt-2 text-right">
+                        <button onclick="deleteDiary(${item.id})" class="text-[10px] text-stone-400 hover:text-red-500 transition-colors">기록 흘려보내기(삭제)</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteDiary(id) {
+            let diaries = JSON.parse(localStorage.getItem('rest_diaries') || '[]');
+            diaries = diaries.filter(item => item.id !== id);
+            localStorage.setItem('rest_diaries', JSON.stringify(diaries));
+            renderDiaries();
+            showToast('한 장의 마음 기록을 가볍게 지웠습니다.');
+        }
+
+        function clearDiaries() {
+            if (confirm('기록한 마음 일기를 전부 삭제하시겠습니까?')) {
+                localStorage.removeItem('rest_diaries');
+                renderDiaries();
+                showToast('모든 감정 기록이 사라졌습니다.');
+            }
+        }
+
+        // HTML 이스케이프 유틸리티
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // 5. 모달 및 토스트 알림 조작
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        let toastTimeout;
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.style.opacity = '1';
+            toast.style.pointerEvents = 'auto';
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.pointerEvents = 'none';
+            }, 2500);
+        }
+
+        // 시작 시 데이터 로드
+        window.onload = function() {
+            renderDiaries();
+        }
+    </script>
+</body>
+</html>
+
